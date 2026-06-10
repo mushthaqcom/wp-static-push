@@ -1,0 +1,296 @@
+/* WP Static Push — Admin Styles */
+
+.wpsp-wrap { max-width: 1200px; }
+
+/* Header */
+.wpsp-header {
+    background: #1a1a2e;
+    margin: 0 -20px 24px;
+    padding: 0 20px;
+}
+.wpsp-header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 0;
+}
+.wpsp-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #fff;
+}
+.wpsp-logo .dashicons {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+    color: #6c63ff;
+}
+.wpsp-logo h1 {
+    color: #fff;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 0;
+    padding: 0;
+    border: none;
+    line-height: 1;
+}
+.wpsp-version {
+    color: #888;
+    font-size: 12px;
+    background: #2a2a40;
+    padding: 4px 10px;
+    border-radius: 20px;
+}
+
+/* Grid */
+.wpsp-grid {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 20px;
+    align-items: start;
+}
+@media (max-width: 960px) {
+    .wpsp-grid { grid-template-columns: 1fr; }
+}
+
+/* Cards */
+.wpsp-card {
+    background: #fff;
+    border: 1px solid #e2e4e7;
+    border-radius: 10px;
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.06);
+}
+.wpsp-card h2 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0 0 6px;
+    padding: 0;
+    border: none;
+    color: #1a1a2e;
+}
+.wpsp-card-primary {
+    border-left: 4px solid #6c63ff;
+}
+.wpsp-card-info {
+    background: #f8f9ff;
+    border-color: #d0d5ff;
+}
+.wpsp-section-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #888;
+    margin: 20px 0 10px;
+    padding-top: 16px;
+    border-top: 1px solid #f0f0f0;
+}
+.wpsp-muted { color: #888; font-size: 0.9rem; margin-bottom: 12px; }
+
+/* Status Bar */
+.wpsp-status-bar {
+    background: #f5f5f8;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 16px 0;
+    font-size: 0.9rem;
+    color: #555;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.wpsp-progress {
+    flex: 1;
+    background: #e0e0e0;
+    border-radius: 4px;
+    height: 6px;
+    overflow: hidden;
+    min-width: 100px;
+}
+.wpsp-progress-inner {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #6c63ff, #48cae4);
+    border-radius: 4px;
+    transition: width 0.4s ease;
+    animation: wpsp-pulse 1.5s infinite;
+}
+@keyframes wpsp-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+/* Buttons */
+.wpsp-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+.wpsp-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 18px;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    line-height: 1;
+}
+.wpsp-btn .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    margin-top: -1px;
+}
+.wpsp-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+.wpsp-btn-primary {
+    background: #6c63ff;
+    color: #fff;
+}
+.wpsp-btn-primary:hover:not(:disabled) { background: #574fd6; color: #fff; }
+.wpsp-btn-github {
+    background: #1a1a2e;
+    color: #fff;
+}
+.wpsp-btn-github:hover:not(:disabled) { background: #333; color: #fff; }
+.wpsp-btn-secondary {
+    background: #f0f0f5;
+    color: #333;
+}
+.wpsp-btn-secondary:hover:not(:disabled) { background: #e0e0e8; color: #333; }
+.wpsp-btn-sm {
+    padding: 6px 14px;
+    font-size: 0.82rem;
+    background: #f0f0f5;
+    color: #333;
+}
+.wpsp-btn-sm:hover { background: #e0e0e8; }
+
+/* Result box */
+.wpsp-result {
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    margin-top: 8px;
+}
+.wpsp-result.success {
+    background: #f0fff4;
+    border: 1px solid #b7e4c7;
+    color: #1a6b3a;
+}
+.wpsp-result.error {
+    background: #fff5f5;
+    border: 1px solid #fcc;
+    color: #c0392b;
+}
+.wpsp-last-run {
+    font-size: 0.82rem;
+    color: #aaa;
+    margin-top: 12px;
+}
+
+/* Form fields */
+.wpsp-fields { display: flex; flex-direction: column; gap: 14px; }
+.wpsp-fields-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+.wpsp-field { display: flex; flex-direction: column; gap: 4px; }
+.wpsp-field label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.wpsp-field input[type="text"],
+.wpsp-field input[type="url"],
+.wpsp-field input[type="password"],
+.wpsp-field input[type="number"],
+.wpsp-field textarea {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+.wpsp-field input:focus, .wpsp-field textarea:focus {
+    border-color: #6c63ff;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(108, 99, 255, 0.15);
+}
+.wpsp-field small { font-size: 0.8rem; color: #888; }
+.wpsp-link { font-size: 0.8rem; font-weight: 400; color: #6c63ff; text-decoration: none; }
+.wpsp-link:hover { text-decoration: underline; }
+.wpsp-checks { display: flex; flex-direction: column; gap: 10px; }
+.wpsp-check {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+.wpsp-inline {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+#wpsp-github-test-result { font-size: 0.88rem; }
+.wpsp-form-footer { margin-top: 20px; padding-top: 16px; border-top: 1px solid #f0f0f0; }
+
+/* Site Analysis */
+.wpsp-site-meta { display: flex; flex-direction: column; gap: 6px; margin-bottom: 4px; }
+.wpsp-meta-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.88rem;
+    padding: 6px 0;
+    border-bottom: 1px solid #f5f5f5;
+}
+.wpsp-theme-row, .wpsp-plugin-row {
+    padding: 8px 0;
+    border-bottom: 1px solid #f5f5f5;
+}
+.wpsp-theme-info, .wpsp-plugin-info {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin-bottom: 3px;
+    font-size: 0.9rem;
+}
+.wpsp-compat-note {
+    font-size: 0.8rem;
+    color: #666;
+    display: block;
+}
+.wpsp-compat-note.small { font-size: 0.78rem; }
+.wpsp-plugin-list { max-height: 360px; overflow-y: auto; }
+
+/* Guide */
+.wpsp-guide {
+    padding-left: 18px;
+    margin: 0;
+    color: #555;
+    font-size: 0.875rem;
+    line-height: 1.8;
+}
+.wpsp-guide li { margin-bottom: 4px; }
