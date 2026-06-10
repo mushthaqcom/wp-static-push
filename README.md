@@ -5,10 +5,11 @@ Generate a fully static version of your WordPress site and push it to GitHub or 
 ## Features
 
 - 🔍 **Full Site Crawler** — crawls all posts, pages, categories, tags, and linked assets
-- 🐙 **GitHub Push** — push directly to any repo/branch (perfect for GitHub Pages)
+- 🐙 **Atomic GitHub Push** — all files land in a single git commit (one Cloudflare Pages deployment per push, not one per file)
 - 📦 **ZIP Download** — download static site as a ZIP for manual deployment
 - 🔍 **SEO-Ready** — auto-generates `sitemap.xml`, `robots.txt`, `404.html`, and `.htaccess`
 - 🧠 **Site Analysis** — analyzes your active plugins and theme for static compatibility
+- 📋 **Detailed Logs** — collapsible log panel after every operation with error/warning highlighting
 - ⚙️ **Configurable** — custom base URL, crawl depth, exclude paths, sub-directory push
 
 ## Installation
@@ -50,9 +51,16 @@ Generate a fully static version of your WordPress site and push it to GitHub or 
 - `ZipArchive` PHP extension (for ZIP download)
 - WordPress 5.8+
 - Outbound HTTP access (for self-crawling)
+- GitHub Personal Access Token with `repo` scope (for GitHub push)
 
 ## Tips
 
 - Disable caching plugins before generating (W3 Total Cache, WP Rocket, etc.) for fresh HTML output
 - For large sites (200+ pages), increase `max_execution_time` in PHP settings
 - The output is stored in `/wp-content/wp-static-push-output/site/` — protected from direct web access
+- The target branch is auto-created on first push if it doesn't exist yet
+- Each push creates exactly one git commit regardless of how many files changed — Cloudflare Pages and GitHub Pages will only trigger one deployment
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md).

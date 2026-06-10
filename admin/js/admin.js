@@ -9,8 +9,31 @@ jQuery(function ($) {
     var $progress     = $('#wpsp-progress');
     var $progressBar  = $('#wpsp-progress-inner');
     var $result       = $('#wpsp-result');
+    var $logPanel     = $('#wpsp-log-panel');
+    var $logSummary   = $('#wpsp-log-summary');
+    var $logEntries   = $('#wpsp-log-entries');
     var $lastRun      = $('#wpsp-last-run');
     var $testResult   = $('#wpsp-github-test-result');
+
+    var generateMessages = [
+        'Crawling your site…',
+        'Following internal links…',
+        'Downloading assets (CSS, JS, images)…',
+        'Processing page content…',
+        'Building static HTML files…',
+        'Generating SEO files…',
+        'Finalising output…',
+    ];
+
+    var pushMessages = [
+        'Reading output files…',
+        'Creating file blobs on GitHub…',
+        'Still uploading blobs…',
+        'Building git tree…',
+        'Creating single commit…',
+        'Updating branch ref…',
+        'Almost done…',
+    ];
 
     // ── Fetch initial status ──────────────────────────────────────────────
     ajaxRequest('wpsp_get_status', {}, function (data) {
@@ -30,64 +53,92 @@ jQuery(function ($) {
     $generateBtn.on('click', function () {
         if (!confirm('This will crawl your entire site and overwrite the previous static output. Continue?')) return;
 
-        setBusy(true, 'Crawling your site…');
-        animateProgress(15, 85, 60000); // fake progress over ~60s
+        clearLog();
+        setBusy(true, generateMessages[0]);
+        animateProgress(5, 90, 90000);
+        cycleMessages(generateMessages, 8000);
 
         ajaxRequest('wpsp_generate', {}, function (data) {
             stopProgress();
+            stopCycling();
             setBusy(false);
             enableDeployButtons();
 
-            var msg = '✅ ' + data.message;
+            var msg = '<strong>Generated ' + data.pages + ' pages &amp; ' + data.assets + ' assets</strong> in ' + data.duration + 's';
+            if (data.seo_files && data.seo_files.length) {
+                msg += '<br><span class="wpsp-log-meta">SEO files: ' + data.seo_files.join(', ') + '</span>';
+            }
             if (data.errors && data.errors.length) {
-                msg += '<br><strong>Warnings:</strong> ' + data.errors.length + ' URL(s) had issues.';
+                msg += '<br><span class="wpsp-log-warn">' + data.errors.length + ' URL(s) had issues — see log below</span>';
             }
             showResult(msg, 'success');
+
+            var logLines = (data.log || []).slice();
+            if (data.errors && data.errors.length) {
+                logLines = logLines.concat(data.errors);
+            }
+            showLog('Generate log (' + logLines.length + ' entries)', logLines);
+
             $lastRun.html('Last generated: just now &nbsp;·&nbsp; ' + data.pages + ' pages, ' + data.assets + ' assets');
         }, function (err) {
             stopProgress();
+            stopCycling();
             setBusy(false);
-            showResult('❌ Generation failed: ' + err, 'error');
+            showResult('<strong>Generation failed</strong><br>' + err, 'error');
         });
     });
 
     // ── Push to GitHub ─────────────────────────────────────────────────────
     $pushBtn.on('click', function () {
-        if (!confirm('Push all static files to GitHub? This will overwrite existing files on the target branch.')) return;
+        if (!confirm('Push all static files to GitHub as a single commit? This will overwrite the target branch content.')) return;
 
-        setBusy(true, 'Pushing to GitHub…');
-        animateProgress(5, 95, 120000);
+        clearLog();
+        setBusy(true, pushMessages[0]);
+        animateProgress(5, 90, 120000);
+        cycleMessages(pushMessages, 10000);
 
         ajaxRequest('wpsp_push_github', {}, function (data) {
             stopProgress();
+            stopCycling();
             setBusy(false);
 
-            var msg = '✅ ' + data.message;
-            if (data.errors && data.errors.length) {
-                msg += '<br><strong>Errors:</strong><br>' + data.errors.slice(0, 5).join('<br>');
+            var branch = data.log && data.log.length ? (data.log.filter(function(l){ return l.indexOf('branch "') !== -1; })[0] || '').replace(/.*branch "([^"]+)".*/, '$1') : '';
+            var msg = '<strong>Pushed ' + data.pushed + ' files</strong> in a single commit — ' + data.duration + 's';
+            if (branch) msg += '<br><span class="wpsp-log-meta">Branch: ' + escHtml(branch) + '</span>';
+            if (data.commit_url) {
+                msg += '<br><a href="' + escHtml(data.commit_url) + '" target="_blank" rel="noopener">View commit ' + escHtml(data.commit_sha.slice(0, 7)) + ' on GitHub →</a>';
             }
             if (data.pages_url) {
-                msg += '<br><a href="' + data.pages_url + '" target="_blank">🌐 View GitHub Pages site →</a>';
+                msg += '<br><a href="' + escHtml(data.pages_url) + '" target="_blank" rel="noopener">View GitHub Pages site →</a>';
+            }
+            if (data.errors && data.errors.length) {
+                msg += '<br><span class="wpsp-log-warn">' + data.errors.length + ' file(s) failed — see log</span>';
             }
             showResult(msg, 'success');
+
+            var logLines = (data.log || []).slice();
+            if (data.errors && data.errors.length) {
+                logLines = logLines.concat(data.errors);
+            }
+            showLog('Push log (' + logLines.length + ' steps)', logLines);
         }, function (err) {
             stopProgress();
+            stopCycling();
             setBusy(false);
-            showResult('❌ Push failed: ' + err, 'error');
+            showResult('<strong>Push failed</strong><br>' + err, 'error');
         });
     });
 
     // ── Download ZIP ───────────────────────────────────────────────────────
     $downloadBtn.on('click', function () {
-        setBusy(true, 'Creating ZIP…');
+        setBusy(true, 'Creating ZIP archive…');
 
         ajaxRequest('wpsp_download_zip', {}, function (data) {
             setBusy(false);
             showResult(
-                '✅ ZIP ready (' + data.size + ') — <a href="' + data.download_url + '" download="' + data.filename + '">Click to download</a>',
+                'ZIP ready (' + data.size + ') — <a href="' + data.download_url + '" download="' + data.filename + '">Click to download</a>',
                 'success'
             );
-            // Auto-trigger download
             var a = document.createElement('a');
             a.href = data.download_url;
             a.download = data.filename;
@@ -96,7 +147,7 @@ jQuery(function ($) {
             document.body.removeChild(a);
         }, function (err) {
             setBusy(false);
-            showResult('❌ ZIP failed: ' + err, 'error');
+            showResult('<strong>ZIP failed</strong><br>' + err, 'error');
         });
     });
 
@@ -104,9 +155,9 @@ jQuery(function ($) {
     $testBtn.on('click', function () {
         $testResult.text('Testing…');
         ajaxRequest('wpsp_test_github', {}, function (data) {
-            $testResult.html('<span style="color:#1a6b3a">' + data.message + '</span>');
+            $testResult.html('<span style="color:#1a6b3a">' + escHtml(data.message) + '</span>');
         }, function (err) {
-            $testResult.html('<span style="color:#c0392b">❌ ' + err + '</span>');
+            $testResult.html('<span style="color:#c0392b">&#10060; ' + escHtml(err) + '</span>');
         });
     });
 
@@ -122,8 +173,10 @@ jQuery(function ($) {
                 var msg = (response.data && response.data.message) ? response.data.message : (response.data || 'Unknown error');
                 if (onError) onError(msg);
             }
-        }).fail(function () {
-            if (onError) onError('Server request failed — check PHP error log.');
+        }).fail(function (xhr) {
+            var msg = 'Server request failed (HTTP ' + xhr.status + ').';
+            if (xhr.status === 0) msg = 'Server request failed — possible timeout or network error.';
+            if (onError) onError(msg);
         });
     }
 
@@ -149,6 +202,35 @@ jQuery(function ($) {
         $result.removeClass('success error').addClass(type).html(msg).show();
     }
 
+    function showLog(summaryText, lines) {
+        if (!lines || !lines.length) { $logPanel.hide(); return; }
+        $logSummary.text(summaryText);
+        var html = '';
+        lines.forEach(function (line) {
+            var cls = 'wpsp-log-line';
+            if (line.indexOf('[ERROR]') !== -1) cls += ' wpsp-log-error';
+            else if (line.indexOf('[WARN]') !== -1 || line.indexOf('Warning') !== -1 || line.indexOf('HTTP 4') !== -1) cls += ' wpsp-log-warning';
+            html += '<div class="' + cls + '">' + escHtml(line) + '</div>';
+        });
+        $logEntries.html(html);
+        $logPanel.show();
+    }
+
+    function clearLog() {
+        $logPanel.hide();
+        $logEntries.empty();
+        $result.hide();
+    }
+
+    function escHtml(str) {
+        if (!str) return '';
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    }
+
     var progressTimer = null;
     function animateProgress(from, to, duration) {
         var start = Date.now();
@@ -159,13 +241,28 @@ jQuery(function ($) {
             var val      = from + (to - from) * fraction;
             $progressBar.css('width', val + '%');
             if (fraction >= 1) clearInterval(progressTimer);
-        }, 200);
+        }, 300);
     }
 
     function stopProgress() {
         if (progressTimer) clearInterval(progressTimer);
         $progressBar.css('width', '100%');
         setTimeout(function () { $progress.hide(); $progressBar.css('width', '0%'); }, 400);
+    }
+
+    var cycleTimer = null;
+    function cycleMessages(messages, interval) {
+        var idx = 1;
+        cycleTimer = setInterval(function () {
+            if (idx < messages.length) {
+                $statusText.text(messages[idx]);
+                idx++;
+            }
+        }, interval);
+    }
+
+    function stopCycling() {
+        if (cycleTimer) { clearInterval(cycleTimer); cycleTimer = null; }
     }
 
 });

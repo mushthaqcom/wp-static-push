@@ -285,6 +285,57 @@
 .wpsp-compat-note.small { font-size: 0.78rem; }
 .wpsp-plugin-list { max-height: 360px; overflow-y: auto; }
 
+/* Log Panel */
+.wpsp-log-panel {
+    margin-top: 10px;
+    border: 1px solid #e2e4e7;
+    border-radius: 8px;
+    overflow: hidden;
+    font-size: 0.82rem;
+}
+.wpsp-log-panel summary {
+    padding: 9px 14px;
+    background: #f5f5f8;
+    cursor: pointer;
+    font-weight: 600;
+    color: #555;
+    user-select: none;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.wpsp-log-panel summary::-webkit-details-marker { display: none; }
+.wpsp-log-panel summary::before {
+    content: '▶';
+    font-size: 9px;
+    transition: transform 0.15s;
+    display: inline-block;
+}
+.wpsp-log-panel[open] summary::before { transform: rotate(90deg); }
+.wpsp-log-panel summary:hover { background: #eeeef5; }
+.wpsp-log-entries {
+    max-height: 280px;
+    overflow-y: auto;
+    background: #1a1a2e;
+    padding: 10px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.wpsp-log-line {
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 0.78rem;
+    color: #b0b8d0;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    word-break: break-all;
+}
+.wpsp-log-line.wpsp-log-error   { color: #ff8a80; }
+.wpsp-log-line.wpsp-log-warning { color: #ffd180; }
+.wpsp-log-meta  { color: #888; font-size: 0.82rem; }
+.wpsp-log-warn  { color: #e67e22; font-size: 0.82rem; }
+
 /* Guide */
 .wpsp-guide {
     padding-left: 18px;

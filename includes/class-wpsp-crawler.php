@@ -25,6 +25,7 @@ class WPSP_Crawler {
     }
 
     public function run() {
+        $start = microtime( true );
         $this->cleanup_output();
         wp_mkdir_p( $this->output_dir );
 
@@ -71,11 +72,15 @@ class WPSP_Crawler {
         // Download collected assets
         $this->download_assets();
 
+        $duration = round( microtime( true ) - $start, 1 );
+        $this->log[] = 'Completed in ' . $duration . 's — ' . count( $this->visited ) . ' URLs visited, ' . count( $this->assets ) . ' assets';
+
         return array(
-            'pages'  => count( $this->visited ),
-            'assets' => count( $this->assets ),
-            'errors' => $this->errors,
-            'log'    => $this->log,
+            'pages'    => count( $this->visited ),
+            'assets'   => count( $this->assets ),
+            'errors'   => $this->errors,
+            'log'      => $this->log,
+            'duration' => $duration,
         );
     }
 

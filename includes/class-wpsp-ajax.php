@@ -31,12 +31,13 @@ class WPSP_Ajax {
             'assets'    => $result['assets'],
             'seo_files' => $seo_files,
             'errors'    => $result['errors'],
-            'log_count' => count( $result['log'] ),
+            'log'       => array_slice( $result['log'], 0, 300 ),
+            'duration'  => $result['duration'],
             'message'   => sprintf(
-                'Generated %d pages, %d assets. SEO files: %s',
+                'Generated %d pages, %d assets in %ss.',
                 $result['pages'],
                 $result['assets'],
-                implode( ', ', $seo_files )
+                $result['duration']
             ),
         ) );
     }
@@ -59,16 +60,19 @@ class WPSP_Ajax {
         }
 
         wp_send_json_success( array(
-            'pushed'    => $result['pushed'],
-            'errors'    => $result['errors'],
-            'repo_url'  => $result['repo_url'],
-            'pages_url' => $result['pages_url'],
-            'message'   => sprintf(
-                'Pushed %d files to %s (branch: %s). View at: %s',
+            'pushed'     => $result['pushed'],
+            'errors'     => $result['errors'],
+            'commit_sha' => $result['commit_sha'],
+            'commit_url' => $result['commit_url'],
+            'repo_url'   => $result['repo_url'],
+            'pages_url'  => $result['pages_url'],
+            'duration'   => $result['duration'],
+            'log'        => $result['log'],
+            'message'    => sprintf(
+                'Pushed %d files in a single commit to branch "%s" in %ss.',
                 $result['pushed'],
-                $result['repo_url'],
                 WPSP_Settings::get('github_branch'),
-                $result['pages_url']
+                $result['duration']
             ),
         ) );
     }

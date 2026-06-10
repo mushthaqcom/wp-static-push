@@ -46,6 +46,11 @@
 
             <div class="wpsp-result" id="wpsp-result" style="display:none;"></div>
 
+            <details class="wpsp-log-panel" id="wpsp-log-panel" style="display:none;">
+                <summary id="wpsp-log-summary">View detailed log</summary>
+                <div class="wpsp-log-entries" id="wpsp-log-entries"></div>
+            </details>
+
             <div class="wpsp-last-run" id="wpsp-last-run">
                 <span class="wpsp-muted">Checking status…</span>
             </div>
