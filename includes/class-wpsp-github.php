@@ -18,7 +18,7 @@ class WPSP_GitHub {
 
     public function test_connection() {
         if ( empty( $this->token ) || empty( $this->repo ) ) {
-            return new WP_Error( 'config', 'GitHub token and repo are required.' );
+            return new WP_Error( 'config', __( 'GitHub token and repo are required.', 'static-push' ) );
         }
         $response = $this->api_get( '/repos/' . $this->repo );
         if ( is_wp_error( $response ) ) return $response;
@@ -36,7 +36,7 @@ class WPSP_GitHub {
      */
     public function push_directory( $source_dir ) {
         if ( empty( $this->token ) || empty( $this->repo ) ) {
-            return new WP_Error( 'config', 'GitHub token and repo are required.' );
+            return new WP_Error( 'config', __( 'GitHub token and repo are required.', 'static-push' ) );
         }
 
         $log    = array();
@@ -46,7 +46,7 @@ class WPSP_GitHub {
         // Collect all local files
         $files = $this->collect_files( $source_dir );
         if ( empty( $files ) ) {
-            return new WP_Error( 'empty', 'No files found to push.' );
+            return new WP_Error( 'empty', __( 'No files found to push.', 'static-push' ) );
         }
         $log[] = 'Collected ' . count( $files ) . ' files from output directory';
 
@@ -97,7 +97,7 @@ class WPSP_GitHub {
         $log[] = 'Created ' . $pushed_count . ' blobs' . ( $blob_errors ? " ({$blob_errors} failed)" : ' — no errors' );
 
         if ( empty( $tree_items ) ) {
-            return new WP_Error( 'blobs', 'No blobs could be created. Check PHP error log.' );
+            return new WP_Error( 'blobs', __( 'No blobs could be created. Check PHP error log.', 'static-push' ) );
         }
 
         // Step 2: Create a git tree (no base_tree — fresh tree replaces all content)
@@ -105,7 +105,8 @@ class WPSP_GitHub {
             'tree' => $tree_items,
         ) );
         if ( is_wp_error( $tree ) ) {
-            return new WP_Error( 'tree', 'Tree creation failed: ' . $tree->get_error_message() );
+            /* translators: %s: error message returned by the GitHub API. */
+            return new WP_Error( 'tree', sprintf( __( 'Tree creation failed: %s', 'static-push' ), $tree->get_error_message() ) );
         }
         $log[] = 'Created git tree: ' . substr( $tree['sha'], 0, 7 );
 
@@ -118,7 +119,8 @@ class WPSP_GitHub {
         );
         $commit = $this->api_post( '/repos/' . $this->repo . '/git/commits', $commit_body );
         if ( is_wp_error( $commit ) ) {
-            return new WP_Error( 'commit', 'Commit creation failed: ' . $commit->get_error_message() );
+            /* translators: %s: error message returned by the GitHub API. */
+            return new WP_Error( 'commit', sprintf( __( 'Commit creation failed: %s', 'static-push' ), $commit->get_error_message() ) );
         }
         $commit_sha = $commit['sha'];
         $log[] = 'Created commit: ' . substr( $commit_sha, 0, 7 );
@@ -136,7 +138,8 @@ class WPSP_GitHub {
             );
         }
         if ( is_wp_error( $ref_result ) ) {
-            return new WP_Error( 'ref', 'Branch ref update failed: ' . $ref_result->get_error_message() );
+            /* translators: %s: error message returned by the GitHub API. */
+            return new WP_Error( 'ref', sprintf( __( 'Branch ref update failed: %s', 'static-push' ), $ref_result->get_error_message() ) );
         }
         $log[] = 'Updated branch "' . $this->branch . '" → ' . substr( $commit_sha, 0, 7 );
 
@@ -219,7 +222,7 @@ class WPSP_GitHub {
             'Accept'               => 'application/vnd.github+json',
             'X-GitHub-Api-Version' => '2022-11-28',
             'Content-Type'         => 'application/json',
-            'User-Agent'           => 'WP-Static-Push/1.0',
+            'User-Agent'           => 'Static-Push/' . WPSP_VERSION,
         );
     }
 

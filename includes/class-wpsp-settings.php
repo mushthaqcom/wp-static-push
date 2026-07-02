@@ -87,29 +87,29 @@ class WPSP_Settings {
 
         foreach ( $dynamic_plugins as $dp ) {
             if ( stripos( $name, $dp ) !== false ) {
-                return '⚠️ Dynamic — some features won\'t work in static output';
+                return __( '⚠️ Dynamic — some features won\'t work in static output', 'static-push' );
             }
         }
         foreach ( $seo_plugins as $sp ) {
             if ( stripos( $name, $sp ) !== false ) {
-                return '✅ SEO meta tags will be captured in static HTML';
+                return __( '✅ SEO meta tags will be captured in static HTML', 'static-push' );
             }
         }
         foreach ( $cache_plugins as $cp ) {
             if ( stripos( $name, $cp ) !== false ) {
-                return 'ℹ️ Cache plugin — disable before generating for fresh output';
+                return __( 'ℹ️ Cache plugin — disable before generating for fresh output', 'static-push' );
             }
         }
-        return '✅ Should work fine';
+        return __( '✅ Should work fine', 'static-push' );
     }
 
     private static function analyze_theme_compatibility( $name ) {
         $known_builders = array( 'Elementor', 'Divi', 'Avada', 'OceanWP', 'Astra', 'GeneratePress' );
         foreach ( $known_builders as $b ) {
             if ( stripos( $name, $b ) !== false ) {
-                return '✅ Page builder theme — static HTML will be fully rendered';
+                return __( '✅ Page builder theme — static HTML will be fully rendered', 'static-push' );
             }
         }
-        return '✅ Compatible';
+        return __( '✅ Compatible', 'static-push' );
     }
 }

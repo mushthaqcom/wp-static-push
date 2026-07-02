@@ -5,14 +5,14 @@ class WPSP_Zip {
 
     public static function create( $source_dir ) {
         if ( ! class_exists( 'ZipArchive' ) ) {
-            return new WP_Error( 'no_zip', 'ZipArchive PHP extension is not available.' );
+            return new WP_Error( 'no_zip', __( 'ZipArchive PHP extension is not available.', 'static-push' ) );
         }
 
         $zip_file = WPSP_OUTPUT_DIR . '/static-site-' . gmdate('Ymd-His') . '.zip';
         $zip      = new ZipArchive();
 
         if ( $zip->open( $zip_file, ZipArchive::CREATE | ZipArchive::OVERWRITE ) !== true ) {
-            return new WP_Error( 'zip_fail', 'Could not create ZIP file.' );
+            return new WP_Error( 'zip_fail', __( 'Could not create ZIP file.', 'static-push' ) );
         }
 
         $source_dir = realpath( $source_dir );

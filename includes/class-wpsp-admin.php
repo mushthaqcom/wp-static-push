@@ -11,8 +11,8 @@ class WPSP_Admin {
 
     public function register_menu() {
         add_menu_page(
-            'Static Push',
-            'Static Push',
+            __( 'Static Push', 'static-push' ),
+            __( 'Static Push', 'static-push' ),
             'manage_options',
             'static-push',
             array( $this, 'render_page' ),
@@ -50,7 +50,7 @@ class WPSP_Admin {
     }
 
     public function save_settings() {
-        if ( ! current_user_can('manage_options') ) wp_die('Unauthorized');
+        if ( ! current_user_can('manage_options') ) wp_die( esc_html__( 'Unauthorized', 'static-push' ) );
         check_admin_referer('wpsp_save_settings');
 
         WPSP_Settings::set( array(

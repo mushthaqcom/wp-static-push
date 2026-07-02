@@ -89,8 +89,9 @@ class WPSP_Crawler {
 
         $response = wp_remote_get( $url, array(
             'timeout'    => 30,
-            'user-agent' => 'WP-Static-Push/1.0',
-            'sslverify'  => false,
+            'user-agent' => 'Static-Push/' . WPSP_VERSION,
+            // Verify TLS by default; allow override for local/self-signed certificates.
+            'sslverify'  => apply_filters( 'wpsp_sslverify', true ),
         ) );
 
         if ( is_wp_error( $response ) ) {
@@ -177,8 +178,9 @@ class WPSP_Crawler {
             $this->visited[ $url ] = true;
 
             $response = wp_remote_get( $url, array(
-                'timeout'   => 20,
-                'sslverify' => false,
+                'timeout'    => 20,
+                'user-agent' => 'Static-Push/' . WPSP_VERSION,
+                'sslverify'  => apply_filters( 'wpsp_sslverify', true ),
             ) );
 
             if ( is_wp_error( $response ) ) continue;

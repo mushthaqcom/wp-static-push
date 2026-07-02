@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Static Push
- * Plugin URI:  https://mushthaq.com
+ * Plugin URI:  https://github.com/mushthaqcom/wp-static-push
  * Description: Generate a fully static version of your WordPress site and push it to GitHub or download as ZIP. SEO-friendly with sitemap, robots.txt, and 404 page support.
  * Version:     1.1.0
  * Author:      Mushthaq

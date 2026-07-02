@@ -35,7 +35,8 @@ class WPSP_Ajax {
             'log'       => array_slice( $result['log'], 0, 300 ),
             'duration'  => $result['duration'],
             'message'   => sprintf(
-                'Generated %d pages, %d assets in %ss.',
+                /* translators: 1: number of pages, 2: number of assets, 3: elapsed seconds. */
+                __( 'Generated %1$d pages, %2$d assets in %3$ss.', 'static-push' ),
                 $result['pages'],
                 $result['assets'],
                 $result['duration']
@@ -48,7 +49,7 @@ class WPSP_Ajax {
 
         $output_dir = WPSP_OUTPUT_DIR . '/site';
         if ( ! file_exists( $output_dir ) ) {
-            wp_send_json_error( 'No static site generated yet. Please generate first.' );
+            wp_send_json_error( __( 'No static site generated yet. Please generate first.', 'static-push' ) );
         }
 
         // Pushing many files through the GitHub API can be slow; raise the time limit where the host permits it.
@@ -71,7 +72,8 @@ class WPSP_Ajax {
             'duration'   => $result['duration'],
             'log'        => $result['log'],
             'message'    => sprintf(
-                'Pushed %d files in a single commit to branch "%s" in %ss.',
+                /* translators: 1: number of files, 2: branch name, 3: elapsed seconds. */
+                __( 'Pushed %1$d files in a single commit to branch "%2$s" in %3$ss.', 'static-push' ),
                 $result['pushed'],
                 WPSP_Settings::get('github_branch'),
                 $result['duration']
@@ -84,7 +86,7 @@ class WPSP_Ajax {
 
         $output_dir = WPSP_OUTPUT_DIR . '/site';
         if ( ! file_exists( $output_dir ) ) {
-            wp_send_json_error( 'No static site generated yet. Please generate first.' );
+            wp_send_json_error( __( 'No static site generated yet. Please generate first.', 'static-push' ) );
         }
 
         $zip_file = WPSP_Zip::create( $output_dir );
@@ -116,7 +118,12 @@ class WPSP_Ajax {
             'repo'       => $result['full_name'],
             'visibility' => $result['visibility'],
             'url'        => $result['html_url'],
-            'message'    => "✅ Connected to {$result['full_name']} ({$result['visibility']})",
+            'message'    => sprintf(
+                /* translators: 1: repository full name, 2: repository visibility. */
+                __( '✅ Connected to %1$s (%2$s)', 'static-push' ),
+                $result['full_name'],
+                $result['visibility']
+            ),
         ) );
     }
 
@@ -144,10 +151,10 @@ class WPSP_Ajax {
 
     private function verify_nonce() {
         if ( ! current_user_can('manage_options') ) {
-            wp_send_json_error( 'Unauthorized' );
+            wp_send_json_error( __( 'Unauthorized', 'static-push' ) );
         }
         if ( ! check_ajax_referer( 'wpsp_nonce', 'nonce', false ) ) {
-            wp_send_json_error( 'Invalid nonce' );
+            wp_send_json_error( __( 'Invalid nonce', 'static-push' ) );
         }
     }
 }
