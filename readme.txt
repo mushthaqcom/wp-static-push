@@ -2,13 +2,13 @@
 Contributors: mushthaq
 Tags: static site, github, deploy, sitemap, static export
 Requires at least: 5.8
-Tested up to: 6.8
+Tested up to: 7.0
 Requires PHP: 7.4
 Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Generate a fully static version of your WordPress site and push it to GitHub or download it as a ZIP. SEO-friendly, with sitemap, robots.txt, and a 404 page.
+Generate a static copy of your WordPress site and push it to GitHub or download it as a ZIP, with sitemap, robots.txt, and a 404 page.
 
 == Description ==
 

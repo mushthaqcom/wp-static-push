@@ -4,6 +4,7 @@
 .gitignore
 .gitattributes
 .distignore
+.claude
 .DS_Store
 CHANGELOG.md
 README.md
