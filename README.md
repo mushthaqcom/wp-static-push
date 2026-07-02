@@ -1,4 +1,4 @@
-# WP Static Push
+# Static Push
 
 Generate a fully static version of your WordPress site and push it to GitHub or download as a ZIP.
 
@@ -14,7 +14,7 @@ Generate a fully static version of your WordPress site and push it to GitHub or 
 
 ## Installation
 
-1. Upload the `wp-static-push` folder to `/wp-content/plugins/`
+1. Upload the `static-push` folder to `/wp-content/plugins/`
 2. Activate the plugin in WordPress Admin → Plugins
 3. Go to **Static Push** in the left admin menu
 
@@ -57,7 +57,7 @@ Generate a fully static version of your WordPress site and push it to GitHub or 
 
 - Disable caching plugins before generating (W3 Total Cache, WP Rocket, etc.) for fresh HTML output
 - For large sites (200+ pages), increase `max_execution_time` in PHP settings
-- The output is stored in `/wp-content/wp-static-push-output/site/` — protected from direct web access
+- The output is stored in `/wp-content/static-push-output/site/` — protected from direct web access
 - The target branch is auto-created on first push if it doesn't exist yet
 - Each push creates exactly one git commit regardless of how many files changed — Cloudflare Pages and GitHub Pages will only trigger one deployment
 

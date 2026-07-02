@@ -1,13 +1,14 @@
 <?php
 /**
- * Plugin Name: WP Static Push
+ * Plugin Name: Static Push
  * Plugin URI:  https://mushthaq.com
  * Description: Generate a fully static version of your WordPress site and push it to GitHub or download as ZIP. SEO-friendly with sitemap, robots.txt, and 404 page support.
  * Version:     1.1.0
  * Author:      Mushthaq
  * Author URI:  https://mushthaq.com
  * License:     GPL-2.0+
- * Text Domain: wp-static-push
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain: static-push
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
@@ -15,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 define( 'WPSP_VERSION',    '1.1.0' );
 define( 'WPSP_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'WPSP_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
-define( 'WPSP_OUTPUT_DIR', WP_CONTENT_DIR . '/wp-static-push-output' );
+define( 'WPSP_OUTPUT_DIR', WP_CONTENT_DIR . '/static-push-output' );
 
 require_once WPSP_PLUGIN_DIR . 'includes/class-wpsp-settings.php';
 require_once WPSP_PLUGIN_DIR . 'includes/class-wpsp-crawler.php';

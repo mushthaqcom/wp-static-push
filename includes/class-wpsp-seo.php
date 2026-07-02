@@ -43,7 +43,7 @@ class WPSP_SEO {
             'loc'        => $this->base_url . '/',
             'changefreq' => 'daily',
             'priority'   => '1.0',
-            'lastmod'    => date('Y-m-d'),
+            'lastmod'    => gmdate('Y-m-d'),
         );
 
         // Posts
@@ -57,7 +57,7 @@ class WPSP_SEO {
                 'loc'        => $this->rewrite_url( get_permalink( $post->ID ) ),
                 'changefreq' => 'weekly',
                 'priority'   => '0.8',
-                'lastmod'    => date( 'Y-m-d', strtotime( $post->post_modified ) ),
+                'lastmod'    => gmdate( 'Y-m-d', strtotime( $post->post_modified ) ),
             );
         }
 
@@ -72,7 +72,7 @@ class WPSP_SEO {
                 'loc'        => $this->rewrite_url( get_permalink( $page->ID ) ),
                 'changefreq' => 'monthly',
                 'priority'   => '0.7',
-                'lastmod'    => date( 'Y-m-d', strtotime( $page->post_modified ) ),
+                'lastmod'    => gmdate( 'Y-m-d', strtotime( $page->post_modified ) ),
             );
         }
 
@@ -83,7 +83,7 @@ class WPSP_SEO {
                 'loc'        => $this->rewrite_url( get_category_link( $cat->term_id ) ),
                 'changefreq' => 'weekly',
                 'priority'   => '0.6',
-                'lastmod'    => date('Y-m-d'),
+                'lastmod'    => gmdate('Y-m-d'),
             );
         }
 
@@ -119,79 +119,77 @@ class WPSP_SEO {
     }
 
     private function generate_404() {
-        $site_name = get_bloginfo('name');
-        $home_url  = $this->base_url . '/';
+        $site_name = esc_html( get_bloginfo('name') );
+        $home_url  = esc_url( $this->base_url . '/' );
 
-        $html = <<<HTML
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="robots" content="noindex, nofollow">
-    <title>404 – Page Not Found | {$site_name}</title>
-    <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #f8f9fa;
-            color: #333;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-        }
-        .container {
-            text-align: center;
-            max-width: 480px;
-        }
-        .code {
-            font-size: 7rem;
-            font-weight: 800;
-            color: #e0e0e0;
-            line-height: 1;
-            margin-bottom: 1rem;
-        }
-        h1 {
-            font-size: 1.75rem;
-            font-weight: 700;
-            margin-bottom: 0.75rem;
-        }
-        p {
-            color: #666;
-            margin-bottom: 2rem;
-            line-height: 1.6;
-        }
-        a.btn {
-            display: inline-block;
-            padding: 0.75rem 2rem;
-            background: #333;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: 600;
-            transition: background 0.2s;
-        }
-        a.btn:hover { background: #555; }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="code">404</div>
-        <h1>Page Not Found</h1>
-        <p>The page you're looking for doesn't exist or may have been moved.</p>
-        <a class="btn" href="{$home_url}">← Back to Home</a>
-    </div>
-</body>
-</html>
-HTML;
+        $html  = "<!DOCTYPE html>\n";
+        $html .= "<html lang=\"en\">\n";
+        $html .= "<head>\n";
+        $html .= "    <meta charset=\"UTF-8\">\n";
+        $html .= "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n";
+        $html .= "    <meta name=\"robots\" content=\"noindex, nofollow\">\n";
+        $html .= "    <title>404 &ndash; Page Not Found | {$site_name}</title>\n";
+        $html .= "    <style>\n";
+        $html .= "        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }\n";
+        $html .= "        body {\n";
+        $html .= "            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;\n";
+        $html .= "            background: #f8f9fa;\n";
+        $html .= "            color: #333;\n";
+        $html .= "            min-height: 100vh;\n";
+        $html .= "            display: flex;\n";
+        $html .= "            align-items: center;\n";
+        $html .= "            justify-content: center;\n";
+        $html .= "            padding: 2rem;\n";
+        $html .= "        }\n";
+        $html .= "        .container {\n";
+        $html .= "            text-align: center;\n";
+        $html .= "            max-width: 480px;\n";
+        $html .= "        }\n";
+        $html .= "        .code {\n";
+        $html .= "            font-size: 7rem;\n";
+        $html .= "            font-weight: 800;\n";
+        $html .= "            color: #e0e0e0;\n";
+        $html .= "            line-height: 1;\n";
+        $html .= "            margin-bottom: 1rem;\n";
+        $html .= "        }\n";
+        $html .= "        h1 {\n";
+        $html .= "            font-size: 1.75rem;\n";
+        $html .= "            font-weight: 700;\n";
+        $html .= "            margin-bottom: 0.75rem;\n";
+        $html .= "        }\n";
+        $html .= "        p {\n";
+        $html .= "            color: #666;\n";
+        $html .= "            margin-bottom: 2rem;\n";
+        $html .= "            line-height: 1.6;\n";
+        $html .= "        }\n";
+        $html .= "        a.btn {\n";
+        $html .= "            display: inline-block;\n";
+        $html .= "            padding: 0.75rem 2rem;\n";
+        $html .= "            background: #333;\n";
+        $html .= "            color: #fff;\n";
+        $html .= "            text-decoration: none;\n";
+        $html .= "            border-radius: 6px;\n";
+        $html .= "            font-weight: 600;\n";
+        $html .= "            transition: background 0.2s;\n";
+        $html .= "        }\n";
+        $html .= "        a.btn:hover { background: #555; }\n";
+        $html .= "    </style>\n";
+        $html .= "</head>\n";
+        $html .= "<body>\n";
+        $html .= "    <div class=\"container\">\n";
+        $html .= "        <div class=\"code\">404</div>\n";
+        $html .= "        <h1>Page Not Found</h1>\n";
+        $html .= "        <p>The page you&rsquo;re looking for doesn&rsquo;t exist or may have been moved.</p>\n";
+        $html .= "        <a class=\"btn\" href=\"{$home_url}\">&larr; Back to Home</a>\n";
+        $html .= "    </div>\n";
+        $html .= "</body>\n";
+        $html .= "</html>\n";
 
         file_put_contents( $this->output_dir . '/404.html', $html );
     }
 
     private function generate_htaccess() {
-        $content  = "# WP Static Push — generated .htaccess\n\n";
+        $content  = "# Static Push — generated .htaccess\n\n";
         $content .= "Options -Indexes\n\n";
         $content .= "# Custom 404\n";
         $content .= "ErrorDocument 404 /404.html\n\n";

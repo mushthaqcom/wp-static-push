@@ -232,20 +232,15 @@ class WPSP_Crawler {
     }
 
     private function cleanup_output() {
-        if ( file_exists( $this->output_dir ) ) {
-            $this->rrmdir( $this->output_dir );
+        global $wp_filesystem;
+        if ( ! function_exists( 'WP_Filesystem' ) ) {
+            require_once ABSPATH . 'wp-admin/includes/file.php';
         }
-    }
+        WP_Filesystem();
 
-    private function rrmdir( $dir ) {
-        if ( ! is_dir( $dir ) ) return;
-        $objects = scandir( $dir );
-        foreach ( $objects as $object ) {
-            if ( $object === '.' || $object === '..' ) continue;
-            $path = $dir . '/' . $object;
-            is_dir( $path ) ? $this->rrmdir( $path ) : unlink( $path );
+        if ( $wp_filesystem && $wp_filesystem->exists( $this->output_dir ) ) {
+            $wp_filesystem->delete( $this->output_dir, true );
         }
-        rmdir( $dir );
     }
 
     public function get_output_dir() {

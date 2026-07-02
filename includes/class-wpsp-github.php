@@ -110,7 +110,7 @@ class WPSP_GitHub {
         $log[] = 'Created git tree: ' . substr( $tree['sha'], 0, 7 );
 
         // Step 3: Create a single commit
-        $commit_msg  = 'WP Static Push: ' . gmdate( 'Y-m-d H:i' ) . ' UTC — ' . $pushed_count . ' files';
+        $commit_msg  = 'Static Push: ' . gmdate( 'Y-m-d H:i' ) . ' UTC — ' . $pushed_count . ' files';
         $commit_body = array(
             'message' => $commit_msg,
             'tree'    => $tree['sha'],

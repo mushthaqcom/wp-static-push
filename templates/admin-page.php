@@ -5,13 +5,13 @@
     <div class="wpsp-header-inner">
         <div class="wpsp-logo">
             <span class="dashicons dashicons-cloud-upload"></span>
-            <h1>WP Static Push</h1>
+            <h1>Static Push</h1>
         </div>
-        <span class="wpsp-version">v<?php echo WPSP_VERSION; ?></span>
+        <span class="wpsp-version">v<?php echo esc_html( WPSP_VERSION ); ?></span>
     </div>
 </div>
 
-<?php if ( isset( $_GET['saved'] ) ): ?>
+<?php if ( isset( $_GET['saved'] ) ): // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only display flag, no state change. ?>
 <div class="notice notice-success is-dismissible"><p>✅ Settings saved.</p></div>
 <?php endif; ?>
 
@@ -59,7 +59,7 @@
         <!-- SETTINGS CARD -->
         <div class="wpsp-card">
             <h2>⚙️ Settings</h2>
-            <form method="post" action="<?php echo admin_url('admin-post.php'); ?>">
+            <form method="post" action="<?php echo esc_url( admin_url('admin-post.php') ); ?>">
                 <?php wp_nonce_field('wpsp_save_settings'); ?>
                 <input type="hidden" name="action" value="wpsp_save_settings">
 
@@ -67,7 +67,7 @@
                 <div class="wpsp-fields">
                     <div class="wpsp-field">
                         <label>Personal Access Token
-                            <a href="https://github.com/settings/tokens/new?scopes=repo&description=WP+Static+Push" target="_blank" class="wpsp-link">Generate →</a>
+                            <a href="https://github.com/settings/tokens/new?scopes=repo&description=Static+Push" target="_blank" class="wpsp-link">Generate →</a>
                         </label>
                         <input type="password" name="github_token"
                             value="<?php echo esc_attr($settings['github_token']); ?>"
@@ -108,7 +108,7 @@
                         <label>Production Base URL <small>(optional — defaults to WordPress site URL)</small></label>
                         <input type="url" name="base_url"
                             value="<?php echo esc_attr($settings['base_url']); ?>"
-                            placeholder="<?php echo get_site_url(); ?>">
+                            placeholder="<?php echo esc_attr( get_site_url() ); ?>">
                         <small>Use this if your static site will be hosted at a different URL (e.g. GitHub Pages URL)</small>
                     </div>
                     <div class="wpsp-field">

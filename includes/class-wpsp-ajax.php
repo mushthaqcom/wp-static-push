@@ -14,8 +14,9 @@ class WPSP_Ajax {
     public function handle_generate() {
         $this->verify_nonce();
 
-        @set_time_limit( 300 );
-        @ini_set( 'memory_limit', '256M' );
+        // Crawling a full site can take a while and consume memory; raise limits where the host permits it.
+        set_time_limit( 300 ); // phpcs:ignore Squiz.PHP.DiscouragedFunctions.Discouraged -- long-running crawl needs a higher time limit.
+        wp_raise_memory_limit( 'admin' );
 
         $crawler = new WPSP_Crawler();
         $result  = $crawler->run();
@@ -50,7 +51,8 @@ class WPSP_Ajax {
             wp_send_json_error( 'No static site generated yet. Please generate first.' );
         }
 
-        @set_time_limit( 600 );
+        // Pushing many files through the GitHub API can be slow; raise the time limit where the host permits it.
+        set_time_limit( 600 ); // phpcs:ignore Squiz.PHP.DiscouragedFunctions.Discouraged -- long-running GitHub push needs a higher time limit.
 
         $github = new WPSP_GitHub();
         $result = $github->push_directory( $output_dir );

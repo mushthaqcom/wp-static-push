@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to WP Static Push are documented here.
+All notable changes to Static Push are documented here.
 
 ## [1.1.0] — 2026-06-10
 

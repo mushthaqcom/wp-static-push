@@ -1,0 +1,10 @@
+# Files and directories excluded from the distributed plugin ZIP.
+.git
+.github
+.gitignore
+.gitattributes
+.distignore
+.DS_Store
+CHANGELOG.md
+README.md
+node_modules

@@ -8,7 +8,7 @@ class WPSP_Zip {
             return new WP_Error( 'no_zip', 'ZipArchive PHP extension is not available.' );
         }
 
-        $zip_file = WPSP_OUTPUT_DIR . '/static-site-' . date('Ymd-His') . '.zip';
+        $zip_file = WPSP_OUTPUT_DIR . '/static-site-' . gmdate('Ymd-His') . '.zip';
         $zip      = new ZipArchive();
 
         if ( $zip->open( $zip_file, ZipArchive::CREATE | ZipArchive::OVERWRITE ) !== true ) {

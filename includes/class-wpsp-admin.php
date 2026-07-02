@@ -11,10 +11,10 @@ class WPSP_Admin {
 
     public function register_menu() {
         add_menu_page(
-            'WP Static Push',
+            'Static Push',
             'Static Push',
             'manage_options',
-            'wp-static-push',
+            'static-push',
             array( $this, 'render_page' ),
             'dashicons-cloud-upload',
             80
@@ -22,7 +22,7 @@ class WPSP_Admin {
     }
 
     public function enqueue_assets( $hook ) {
-        if ( strpos( $hook, 'wp-static-push' ) === false ) return;
+        if ( strpos( $hook, 'static-push' ) === false ) return;
 
         wp_enqueue_style(
             'wpsp-admin',
@@ -54,19 +54,19 @@ class WPSP_Admin {
         check_admin_referer('wpsp_save_settings');
 
         WPSP_Settings::set( array(
-            'github_token'     => sanitize_text_field( $_POST['github_token'] ?? '' ),
-            'github_repo'      => sanitize_text_field( $_POST['github_repo'] ?? '' ),
-            'github_branch'    => sanitize_text_field( $_POST['github_branch'] ?? 'gh-pages' ),
-            'github_subdir'    => sanitize_text_field( $_POST['github_subdir'] ?? '' ),
-            'base_url'         => esc_url_raw( $_POST['base_url'] ?? '' ),
-            'exclude_paths'    => sanitize_textarea_field( $_POST['exclude_paths'] ?? '' ),
+            'github_token'     => sanitize_text_field( wp_unslash( $_POST['github_token'] ?? '' ) ),
+            'github_repo'      => sanitize_text_field( wp_unslash( $_POST['github_repo'] ?? '' ) ),
+            'github_branch'    => sanitize_text_field( wp_unslash( $_POST['github_branch'] ?? 'gh-pages' ) ),
+            'github_subdir'    => sanitize_text_field( wp_unslash( $_POST['github_subdir'] ?? '' ) ),
+            'base_url'         => esc_url_raw( wp_unslash( $_POST['base_url'] ?? '' ) ),
+            'exclude_paths'    => sanitize_textarea_field( wp_unslash( $_POST['exclude_paths'] ?? '' ) ),
             'generate_sitemap' => isset( $_POST['generate_sitemap'] ) ? '1' : '0',
             'generate_robots'  => isset( $_POST['generate_robots'] ) ? '1' : '0',
             'generate_404'     => isset( $_POST['generate_404'] ) ? '1' : '0',
             'crawl_depth'      => intval( $_POST['crawl_depth'] ?? 5 ),
         ) );
 
-        wp_redirect( admin_url('admin.php?page=wp-static-push&saved=1') );
+        wp_safe_redirect( admin_url('admin.php?page=static-push&saved=1') );
         exit;
     }
 }
